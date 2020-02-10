@@ -1,6 +1,3 @@
-
-
-
 #include <Servo.h>
 #include <EEPROM.h>
 #include <uSTimer2.h>
@@ -100,7 +97,7 @@ unsigned int ui_Left_Motor_Speed;
 unsigned int ui_Right_Motor_Speed;
 long l_Left_Motor_Position;
 long l_Right_Motor_Position;
-
+int counter = 0;                                          //counter 
 unsigned long ul_3_Second_timer = 0;
 unsigned long ul_Display_Time;
 unsigned long ul_Calibration_Time;
@@ -283,9 +280,9 @@ void loop()
         
         
         
-  bool MiddleLight = (ui_Middle_Line_Tracker_Data < (ui_Middle_Line_Tracker_Dark - ui_Line_Tracker_Tolerance))
-  bool LeftLight = (ui_Left_Line_Tracker_Data < (ui_Left_Line_Tracker_Dark - ui_Line_Tracker_Tolerance))
-  bool RightLight = (ui_Right_Line_Tracker_Data < (ui_Right_Line_Tracker_Dark - ui_Line_Tracker_Tolerance))
+  bool MiddleLight = (ui_Middle_Line_Tracker_Data < (ui_Middle_Line_Tracker_Dark - ui_Line_Tracker_Tolerance));
+  bool LeftLight = (ui_Left_Line_Tracker_Data < (ui_Left_Line_Tracker_Dark - ui_Line_Tracker_Tolerance));
+  bool RightLight = (ui_Right_Line_Tracker_Data < (ui_Right_Line_Tracker_Dark - ui_Line_Tracker_Tolerance));
   
 
       //GOING STRAIGHT - ALL ON WHITE
@@ -314,13 +311,35 @@ void loop()
           ui_Left_Motor_Speed = 1500;
           ui_Right_Motor_Speed = 1900;
          }    
-         
-          // TRACK ENDS - ALL ON BLACK, MOTORS STOP   
-         else {
+
+         else { 
           ui_Left_Motor_Speed = 1500;
-          ui_Right_Motor_Speed = 1500;
+          ui_Right_Motor_Speed = 1900;
+         }
+         /*
+          // TRACK BREAK - ALL ON BLACK, MOVE FORWARD   
+         else if ((LeftLight==0)&&(MiddleLight == 0)&&(RightLight ==0)&&(counter ==0)){
+          ui_Left_Motor_Speed = 1600;
+          ui_Right_Motor_Speed = 1600;
+          counter++;
          }
          
+         else if ((LeftLight==0)&&(MiddleLight == 0)&&(RightLight ==0)&&(counter ==1)){
+          if ((ul_Echo_Time/148)>3)
+          {
+          ui_Left_Motor_Speed = 1600;
+          ui_Right_Motor_Speed = 1600;
+          }
+          else {
+            ui_Left_Motor_Speed = 1500;
+            ui_Right_Motor_Speed = 1500;
+          }
+         }
+         */
+
+         
+         
+
          
          
          
@@ -619,4 +638,3 @@ void Ping()
   Serial.println(ul_Echo_Time/58); //divide time by 58 to get distance in cm 
 #endif
 }  
-

@@ -291,15 +291,15 @@ void loop()
       //GOING STRAIGHT - ALL ON WHITE
        if (LeftLight == 1 && MiddleLight == 1 && RightLight == 1)
          {
-         ui_Left_Motor_Speed = 1600;
-        ui_Right_Motor_Speed = 1600;
+         ui_Left_Motor_Speed = 1700;
+        ui_Right_Motor_Speed = 1700;
 
          }
 
         // GOING STRAIGHT - ONLY MIDDLE ON WHITE
          else if (MiddleLight == 1){
-          ui_Left_Motor_Speed = 1550;
-          ui_Right_Motor_Speed = 1550;
+          ui_Left_Motor_Speed = 1600;
+          ui_Right_Motor_Speed = 1600;
          }        
          
           // RIGHT Tracker on White - TURN LEFT

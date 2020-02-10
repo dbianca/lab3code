@@ -260,6 +260,7 @@ void loop()
       if(bt_3_S_Time_Up)
       {
         readLineTrackers();
+        Ping();
 
 #ifdef DEBUG_ENCODERS           
         l_Left_Motor_Position = encoder_LeftMotor.getRawPosition();
@@ -284,13 +285,13 @@ void loop()
   bool LeftLight = (ui_Left_Line_Tracker_Data < (ui_Left_Line_Tracker_Dark - ui_Line_Tracker_Tolerance));
   bool RightLight = (ui_Right_Line_Tracker_Data < (ui_Right_Line_Tracker_Dark - ui_Line_Tracker_Tolerance));
   
-
+      
       //GOING STRAIGHT - ALL ON WHITE
        if (LeftLight == 1 && MiddleLight == 1 && RightLight == 1)
          {
-         ui_Left_Motor_Speed = 1700;
-        ui_Right_Motor_Speed = 1700;
-
+          ui_Left_Motor_Speed = 1600;
+          ui_Right_Motor_Speed = 1600;
+          counter++;
          }
 
         // GOING STRAIGHT - ONLY MIDDLE ON WHITE
@@ -312,19 +313,33 @@ void loop()
           ui_Right_Motor_Speed = 1900;
          }    
 
-         else { 
+
+          // LEFT AND MIDDLE ON LIGHT - SLIGHT TURN RIGHT 
+          else if ((LeftLight == 1) && (MiddleLight =1))
+         {
           ui_Left_Motor_Speed = 1500;
-          ui_Right_Motor_Speed = 1900;
-         }
-         /*
-          // TRACK BREAK - ALL ON BLACK, MOVE FORWARD   
-         else if ((LeftLight==0)&&(MiddleLight == 0)&&(RightLight ==0)&&(counter ==0)){
+          ui_Right_Motor_Speed = 1700;
+         }    
+          // RIGHT AND MIDDLE ON LIGHT - SLIGHT TURN LEFT 
+          else if ((RightLight == 1) && (MiddleLight =1))
+         {
+          ui_Left_Motor_Speed = 1700;
+          ui_Right_Motor_Speed = 1500;
+         }    
+
+         
+         else if (((ul_Echo_Time/148)<=3)&&((ul_Echo_Time/148)>0)){
+          ui_Left_Motor_Speed = 1650;
+          ui_Right_Motor_Speed = 1200;
+          
+          }
+
+         else { 
           ui_Left_Motor_Speed = 1600;
           ui_Right_Motor_Speed = 1600;
-          counter++;
          }
          
-         else if ((LeftLight==0)&&(MiddleLight == 0)&&(RightLight ==0)&&(counter ==1)){
+       /*  else if ((LeftLight==0)&&(MiddleLight == 0)&&(RightLight ==0)&&(counter ==1)){
           if ((ul_Echo_Time/148)>3)
           {
           ui_Left_Motor_Speed = 1600;
@@ -336,6 +351,7 @@ void loop()
           }
          }
          */
+
 
          
          

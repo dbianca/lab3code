@@ -97,7 +97,7 @@ unsigned int ui_Left_Motor_Speed;
 unsigned int ui_Right_Motor_Speed;
 long l_Left_Motor_Position;
 long l_Right_Motor_Position;
-int counter = 0;                                          //counter 
+int count = 0;                                          //counter 
 unsigned long ul_3_Second_timer = 0;
 unsigned long ul_Display_Time;
 unsigned long ul_Calibration_Time;
@@ -136,6 +136,9 @@ boolean bt_Heartbeat = true;
 boolean bt_3_S_Time_Up = false;
 boolean bt_Do_Once = false;
 boolean bt_Cal_Initialized = false;
+
+
+bool turning = false;
 
 void setup() {
   Wire.begin();        // Wire library required for I2CEncoder library
@@ -283,7 +286,7 @@ void loop()
          {
           ui_Left_Motor_Speed = 1600;
           ui_Right_Motor_Speed = 1600;
-          counter++;
+         // counter++;
          }
 
         // GOING STRAIGHT - ONLY MIDDLE ON WHITE
@@ -319,14 +322,33 @@ void loop()
           ui_Right_Motor_Speed = 1500;
          }    
 
-         // US sensor reaches 
+         // US sensor reaches 3 inches from box - stops motors and sets count > 0  --> leads into robot backing up and turning logic
          else if (((ul_Echo_Time/148)<=3)&&((ul_Echo_Time/148)>0)){
-          ui_Left_Motor_Speed = 200; 
-          ui_Right_Motor_Speed = 200; 
-           delay(100); 
-           turn(); 
+          ui_Left_Motor_Speed = 1500; 
+          ui_Right_Motor_Speed = 1500;
+          count++;
+          }
+          
+          // when count > 0 and US sensor is a distance < 10, robot starts backing up 
+          else if ( count > 0 && ((ul_Echo_Time/148) <= 10 )){ 
+             ui_Left_Motor_Speed = 1400; 
+             ui_Right_Motor_Speed = 1400; 
           }
 
+          // when robot gets to a distance of 10 from boxes, set turning to true --> see following if statement 
+          else if(!turning && count > 0 && ((ul_Echo_Time/148) > 10 )){
+            turning = true;
+          }
+          
+          // once turning has been set to true, call turn function 
+          else if (turning){
+            turn(); 
+            if(LeftLight == 1 || MiddleLight == 1 || RightLight == 1){        // if during the turn, any light sensor picks up the line, set turning to false, set count back to 0 
+              turning = false;
+              count = 0;   // setting count back to 0 initiates standard line following code 
+          }
+          } 
+          // drive straight 
          else { 
           ui_Left_Motor_Speed = 1600;
           ui_Right_Motor_Speed = 1600;
@@ -622,5 +644,3 @@ void turn()
    ui_Left_Motor_Speed = 1800;
    ui_Right_Motor_Speed = 1200;
     }       
-
-

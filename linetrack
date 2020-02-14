@@ -272,15 +272,7 @@ void loop()
         Serial.println(l_Right_Motor_Position);
 #endif
 
-       // set motor speeds
-    /*    ui_Left_Motor_Speed = constrain(ui_Motors_Speed + ui_Left_Motor_Offset, 1550, 1600);
-        ui_Right_Motor_Speed = constrain(ui_Motors_Speed + ui_Right_Motor_Offset, 1550, 1600);
-*/
-        //ui_Left_Motor_Speed = 1800;
-        //ui_Right_Motor_Speed = 1800; 
-        
-        
-        
+       
   bool MiddleLight = (ui_Middle_Line_Tracker_Data < (ui_Middle_Line_Tracker_Dark - ui_Line_Tracker_Tolerance));
   bool LeftLight = (ui_Left_Line_Tracker_Data < (ui_Left_Line_Tracker_Dark - ui_Line_Tracker_Tolerance));
   bool RightLight = (ui_Right_Line_Tracker_Data < (ui_Right_Line_Tracker_Dark - ui_Line_Tracker_Tolerance));
@@ -315,23 +307,24 @@ void loop()
 
 
           // LEFT AND MIDDLE ON LIGHT - SLIGHT TURN RIGHT 
-          else if ((LeftLight == 1) && (MiddleLight =1))
+          else if ((LeftLight == 1) && (MiddleLight == 1))
          {
           ui_Left_Motor_Speed = 1500;
           ui_Right_Motor_Speed = 1700;
          }    
           // RIGHT AND MIDDLE ON LIGHT - SLIGHT TURN LEFT 
-          else if ((RightLight == 1) && (MiddleLight =1))
+          else if ((RightLight == 1) && (MiddleLight == 1))
          {
           ui_Left_Motor_Speed = 1700;
           ui_Right_Motor_Speed = 1500;
          }    
 
-         
+         // US sensor reaches 
          else if (((ul_Echo_Time/148)<=3)&&((ul_Echo_Time/148)>0)){
-          ui_Left_Motor_Speed = 1650;
-          ui_Right_Motor_Speed = 1200;
-          
+          ui_Left_Motor_Speed = 200; 
+          ui_Right_Motor_Speed = 200; 
+           delay(100); 
+           turn(); 
           }
 
          else { 
@@ -351,38 +344,6 @@ void loop()
           }
          }
          */
-
-
-         
-         
-
-         
-         
-         
-         
-         // Scrapped code
-        
-     /*   //TURNING RIGHT
-         else if ((ui_Left_Line_Tracker_Data < (ui_Left_Line_Tracker_Dark - ui_Line_Tracker_Tolerance)) && (ui_Middle_Line_Tracker_Data < (ui_Middle_Line_Tracker_Dark - ui_Line_Tracker_Tolerance)))
-         {
-          ui_Left_Motor_Speed = 1550;
-          ui_Right_Motor_Speed = 1600;
-         }
-        
-         else if ((ui_Right_Line_Tracker_Data < (ui_Right_Line_Tracker_Dark - ui_Line_Tracker_Tolerance)) && (ui_Middle_Line_Tracker_Data < (ui_Middle_Line_Tracker_Dark - ui_Line_Tracker_Tolerance)))
-         {
-          ui_Right_Motor_Speed -= 45;
-          ui_Left_Motor_Speed += 25;
-         }
-          
-        else if (ui_Middle_Line_Tracker_Data < (ui_Middle_Line_Tracker_Dark - ui_Line_Tracker_Tolerance))
-         {
-         ui_Left_Motor_Speed = constrain(ui_Motors_Speed + ui_Left_Motor_Offset, 1600, 2100) - 250;
-         ui_Right_Motor_Speed = constrain(ui_Motors_Speed + ui_Right_Motor_Offset, 1600, 2100) - 250;
-         } 
-         
-         */
-
 
 
       
@@ -654,3 +615,12 @@ void Ping()
   Serial.println(ul_Echo_Time/58); //divide time by 58 to get distance in cm 
 #endif
 }  
+
+// writing a turn function for when robot reaches end of track 
+void turn()
+{ 
+   ui_Left_Motor_Speed = 1800;
+   ui_Right_Motor_Speed = 1200;
+    }       
+
+

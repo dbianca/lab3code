@@ -336,7 +336,7 @@ void loop()
           }
 
           // when robot gets to a distance of 10 from boxes, set turning to true --> see following if statement 
-          else if(!turning && count > 0 && ((ul_Echo_Time/148) > 10 )){
+          else if(!turning && (count > 0) && ((ul_Echo_Time/148) > 10 )){
             turning = true;
           }
           
@@ -348,8 +348,8 @@ void loop()
               count = 0;   // setting count back to 0 initiates standard line following code 
           }
           } 
-          // drive straight 
-         else { 
+          // drive straight   CHANGED TO ALL ON BLACK
+         else if (LeftLight == 0 && MiddleLight == 0 && RightLight == 0){ 
           ui_Left_Motor_Speed = 1600;
           ui_Right_Motor_Speed = 1600;
          }
@@ -641,6 +641,6 @@ void Ping()
 // writing a turn function for when robot reaches end of track 
 void turn()
 { 
-   ui_Left_Motor_Speed = 1800;
-   ui_Right_Motor_Speed = 1200;
-    }       
+   ui_Left_Motor_Speed = 1200;
+   ui_Right_Motor_Speed = 1800;
+    }
